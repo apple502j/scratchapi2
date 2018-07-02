@@ -28,5 +28,5 @@ setup(
     keywords="scratch api requests",
     packages=find_packages(),
     install_requires="requests",
-    python_requires=">=3.5"
+    python_requires=">=3.0"
     )
