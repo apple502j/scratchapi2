@@ -18,9 +18,6 @@ from .gclass import GenericData
 
 class FrontPage(object):
     """ A class to handle front page """
-    def __init__(self):
-        """ See FrontPage module """
-        pass
 
     def __repr__(self):
         """ Always return <ScratchAPI2 FrontPage> """
