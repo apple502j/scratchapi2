@@ -28,10 +28,6 @@ from .user import Project
 class Meta(object):
     """ Meta - Generic things """
 
-    def __init__(self):
-        """ See Meta module """
-        pass
-
     def __repr__(self):
         """ Always return <ScratchAPI2 Meta> """
         return "<ScratchAPI2 Meta>"
