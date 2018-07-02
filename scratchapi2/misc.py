@@ -9,9 +9,6 @@ import requests
 
 class Misc(object):
     """ Misc - contains things that are not generic. """
-    def __init__(self):
-        """ Misc - contains things that are not generic. """
-        pass
     def __repr__(self):
         """ Always returns <ScratchAPI2 Misc> """
         return "<ScratchAPI2 Misc>"
