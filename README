@@ -1,0 +1,52 @@
+                               scratchapi2                           
+               A new Scratch API Client for Python 3+
+                   Under GPLv3 or any later version
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+Scratch is a project of the Lifelong Kindergarten Group at the MIT Media Lab.
+Scratch is a trademark of the Lifelong Kindergarten Group at the MIT Media Lab.
+The ScratchAPI2 Development team is **NOT** a team of MIT, and none
+of the member is on Scratch Team. Please remember that it's a hobby
+and inofficial.
+
+==== What is this?
+It is a library for humans (and some robots). This library is a client
+of Scratch API, so lots of features are available. But the development
+team decided to remove all deprecated features.
+
+It consists of some classes, such as:
+* Meta (Information, Search, Statistics)
+* Misc (Special Features such as Translate API)
+* User (Scratch user)
+* Project (Scratch project)
+* FrontPage (Scratch Front Page API)
+and some classes just for developers...
+
+==== Requirements
+* Python 3.0+, should be 3.5+, tested on CPython 3.6.1
+* Requests (should be the latest version)
+
+==== For people who want to add a feature
+1. Make sure the API exists! Test by YOURSELF.
+2. If it needs CSRF token, make the code, PLEASE MAKE IT!
+3. Please tell at least one reference. Available references:
+* https://github.com/LLK/scratch-www (read the code)
+* https://github.com/LLK/scratch-rest-api/wiki
+* Scratch Wiki
+
+==== (By the way) Story
+On June 9th, apple502j, the programmer on the team started making it.
+When making, Kenny2scratch always helps. The great co-worker made this
+library greater. For example, GenericData was made by him.
