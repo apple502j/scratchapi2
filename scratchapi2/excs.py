@@ -1,9 +1,5 @@
-""" Scratch API Error """
+"""Scratch API errors"""
 
 class ScratchAPIError(Exception):
-    """ Scratch API Error (Generic) """
-    pass
-
-class RemovedFeatureError(NotImplementedError):
-    """This feature has been removed."""
+    """Generic Scratch API error."""
     pass
