@@ -2,6 +2,9 @@
                A new Scratch API Client for Python 3+
                    Under GPLv3 or any later version
 
+Copyright © 2018 apple502j, kenny2github All rights reversed.
+(It's all right to say "reversed", it's GPL!)
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 Scratch is a project of the Lifelong Kindergarten Group at the MIT Media Lab.
 Scratch is a trademark of the Lifelong Kindergarten Group at the MIT Media Lab.
-The ScratchAPI2 Development team is **NOT** a team of MIT, and none
+The ScratchAPI2 Development Team is **NOT** a team of MIT, and none
 of the member is on Scratch Team. Please remember that it's a hobby
 and inofficial.
 
@@ -27,11 +30,12 @@ of Scratch API, so lots of features are available. But the development
 team decided to remove all deprecated features.
 
 It consists of some classes, such as:
-* Meta (Information, Search, Statistics)
-* Misc (Special Features such as Translate API)
+* Misc (Information, Search, Statistics)
+* Translate (Translate API)
 * User (Scratch user)
 * Project (Scratch project)
 * FrontPage (Scratch Front Page API)
+* Classroom (Scratch classroom)
 and some classes just for developers...
 
 ==== Requirements
@@ -39,6 +43,8 @@ and some classes just for developers...
 * Requests (should be the latest version)
 
 ==== For people who want to add a feature
+The ScratchAPI2 Development Team needs help. See this for detail:
+https://github.com/apple502j/scratchapi2/issues/2
 1. Make sure the API exists! Test by YOURSELF.
 2. If it needs CSRF token, make the code, PLEASE MAKE IT!
 3. Please tell at least one reference. Available references:
@@ -46,7 +52,18 @@ and some classes just for developers...
 * https://github.com/LLK/scratch-rest-api/wiki
 * Scratch Wiki
 
+==== Want to join?
+Answer: Yes! But please make sure you're familiar with Python 3.x,
+have GitHub account, and know about Scratch!
+
+Needed Works:
+* Pull Requests Reviewers
+Nominate at https://github.com/apple502j/scratchapi2/issues/3 !
+
 ==== (By the way) Story
 On June 9th, apple502j, the programmer on the team started making it.
 When making, Kenny2scratch always helps. The great co-worker made this
 library greater. For example, GenericData was made by him.
+
+On July 4th, the library had a great update by him. His codes made this
+library better and better.
