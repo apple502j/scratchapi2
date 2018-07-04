@@ -11,7 +11,7 @@ class GenericData(object):
 
     def __repr__(self):
         if self._repr_str:
-            return self._repr_str.format(self.__dict__)
+            return self._repr_str.format(**self.__dict__)
         return '<GenericData>'
 
     __str__ = __repr__
