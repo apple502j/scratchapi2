@@ -3,7 +3,7 @@
 class GenericData(object):
     """Base class for other data objects created on the fly."""
 
-    self._repr_str = None
+    _repr_str = None
 
     def __init__(self, **kwargs):
         """Initialize object by updating __dict__ with kwargs."""

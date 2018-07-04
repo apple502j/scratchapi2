@@ -19,33 +19,10 @@ import re
 import requests
 from .gclass import GenericData
 from .user import Project
+from .api import APISingleton
 
-class Misc(object):
+class Misc(APISingleton):
     """Misc - Generic things."""
-
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        """Enforce this class as a singleton."""
-        if not cls._instance:
-            cls._instance = super().__new__(cls, *args, **kwargs)
-        return cls._instance
-
-    def __init__(self, api_url="https://api.scratch.mit.edu/"):
-        """Initialize the object with the API URL."""
-        self.api_url = api_url
-
-    def __repr__(self):
-        """Represent the Misc instance."""
-        return "<Misc>"
-
-    __str__ = __repr__
-
-    def _request(self, path, *opts, api_url=None):
-        return requests.get(
-            (api_url or self.api_url)
-            + path.format(*opts)
-        ).json()
 
     def info(self):
         """Get meta information."""
@@ -85,17 +62,17 @@ class Misc(object):
 
     def popular_projects(self, limit=10):
         """Return popular projects."""
-        return self.searchprojects(limit=limit)
+        return self.search_projects(limit=limit)
 
-    def search_studios(key, limit=10):
+    def search_studios(self, key, limit=10):
         """Search Studios."""
         results = self._request('search/studios?limit={}&q={}',
                                 limit,
                                 key)
-        Studio = type('Studio', (GenericData, object), {
-            '_repr_str': '<Studio {studio_id}>',
-            'studio_id': None,
-        })
+        class Studio(GenericData):
+            """Represents a studio."""
+            _repr_str = '<Studio {studio_id}>'
+            studio_id = None
         for result in results:
             yield Studio(
                 owner=result["owner"],
@@ -107,15 +84,15 @@ class Misc(object):
                 last_modified=result["history"]["modified"],
                 followers=result["stats"]["followers"]
             )
-        return studios
 
-    def username_available(name):
+    def username_available(self, name):
         """Check if a username is available."""
         result = self._request('accounts/check_username/{}',
                                name,
                                api_url='https://scratch.mit.edu/')
         return result[0]["msg"]
 
+    @staticmethod
     def offline_ver():
         """Get the latest version of the Scratch 2 Offline Editor."""
         result_url = "https://scratch.mit.edu/scratchr2/static/sa/version.xml"

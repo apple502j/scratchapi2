@@ -14,16 +14,19 @@ import requests
 from .excs import ScratchAPIError
 from .gclass import GenericData
 
+#pylint: disable=too-many-instance-attributes,too-many-function-args
+
 def _request(path, *opts, api_url="https://api.scratch.mit.edu/"):
     result = requests.get(api_url + path.format(*opts)).json()
     if 'code' in result:
         raise ScratchAPIError(result['code'] + ': ' + result['message'])
+    return result
 
 class Project(object):
     """Represents a Scratch Project."""
 
     projectid = None
-    
+
     def __init__(self, projectid, getinfo=True):
         """Initialize a Project."""
         self.projectid = int(projectid)
@@ -56,7 +59,8 @@ class Project(object):
         self.loves = req["stats"]["loves"]
         self.favorites = req["stats"]["favorites"]
         self.comments = req["stats"]["comments"]
-        self.remixes = req["stats"]["remixes"]
+        #renamed to avoid conflict with "remix" method
+        self.remix_count = req["stats"]["remixes"]
         self.parent = (
             Project(req["remix"]["parent"], getinfo=True)
             if req['remix']['parent']
@@ -107,11 +111,11 @@ class Project(object):
         """Yield all studios this Project belongs to."""
         req = _request('projects/{0}/studios?limit={1}&offset={2}',
                        self.projectid, limit, offset)
-        Studio = type('Studio', (GenericData, object), {
-            '_repr_str': '<Studio {studio_id}>',
-            'studio_id': None,
-        })
-        for studio_dict in req:
+        class Studio(GenericData):
+            """Represents a Scratch studio."""
+            _repr_str = '<Studio {studio_id}>'
+            studio_id = None
+        for studio in req:
             yield Studio(
                 owner=studio["owner"],
                 studio_id=studio["id"],
@@ -127,7 +131,7 @@ class User(object):
     """Represents a Scratch user."""
 
     username = None
-    
+
     def __init__(self, username, getinfo=True):
         """Initialize a User."""
         self.username = username
