@@ -8,32 +8,30 @@ Scratch is a project of the Lifelong Kindergarten Group at the MIT Media Lab
 Requires the requests library.
 
 This is made from these classes:
-* Meta - Generic things, Statistics, Search, Health
-* Project - Information about project
+* Misc - Generic things, Statistics, Search, Health
+* Project - Information about projects
 * User - Information about Scratch user, Followers, Messages, Favorites
 * FrontPage - Information about the front page
-* Misc - Translator
+* Translate - Translator
 * ScratchAPIError - Error
-* RemovedFeatureError - Error for removed features
 * GenericData - help yourself.
 """
 
 from .user import User, Project
-from .meta import Meta
+from .translate import Translate
 from .front import FrontPage
 from .misc import Misc
-from .excs import ScratchAPIError, RemovedFeatureError
+from .excs import ScratchAPIError
 from .gclass import GenericData
 
 __version__ = '0.1'
 
 __all__ = [
-    'Meta',
+    'Translate',
     'Project',
     'User',
     'FrontPage',
     'Misc',
     'ScratchAPIError',
-    'RemovedFeatureError',
     'GenericData',
 ]

@@ -1,2 +1,2 @@
 [MESSAGES CONTROL]
-disable=too-few-public-methods,no-self-use,too-many-instance-attributes,wrong-import-order,line-too-long,too-few-format-args,bare-except
+disable=too-few-public-methods
