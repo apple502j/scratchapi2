@@ -1,7 +1,7 @@
 """
 Front Page APIs.
 Contains:
-class FrontPage
+class FrontPage (ALWAYS use like FrontPage())
 - news()
 - featured_projects()
 - new_projects()
