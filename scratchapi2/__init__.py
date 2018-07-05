@@ -24,7 +24,7 @@ from .misc import Misc
 from .excs import ScratchAPIError
 from .gclass import GenericData
 
-__version__ = '0.1'
+__version__ = '0.9'
 
 __all__ = [
     'Translate',
