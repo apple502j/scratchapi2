@@ -10,7 +10,6 @@ Contains classes:
 * Classroom
 """
 
-from shutil import copyfileobj as _cfo
 import requests
 from .excs import ScratchAPIError
 from .gclass import GenericData
@@ -29,7 +28,8 @@ def _streaming_request(fileobj, path, *opts,
     a file object ``fileobj`` to copy the request into.
     """
     req = requests.get(api_url + path.format(*opts), stream=True)
-    _cfo(req.raw, fileobj)
+    for block in req.iter_content(1024):
+        fileobj.write(block)
 
 class Project(object):
     """Represents a Scratch Project."""
