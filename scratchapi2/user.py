@@ -22,6 +22,15 @@ def _request(path, *opts, api_url="https://api.scratch.mit.edu/"):
         raise ScratchAPIError(result['code'] + ': ' + result['message'])
     return result
 
+def _streaming_request(fileobj, path, *opts,
+                       api_url="https://projects.scratch.mit.edu/internalapi/"):
+    """Make a large request (usually a project's JSON). This must provide
+    a file object ``fileobj`` to copy the request into.
+    """
+    req = requests.get(api_url + path.format(*opts), stream=True)
+    for block in req.iter_content(1024):
+        fileobj.write(block)
+
 class Project(object):
     """Represents a Scratch Project."""
 
@@ -126,6 +135,14 @@ class Project(object):
                 last_modified=studio["history"]["modified"],
                 followers=studio["stats"]["followers"]
             )
+
+    def save_json(self, filename_or_obj):
+        """Save a project's JSON to a file."""
+        if isinstance(filename_or_obj, str):
+            filename_or_obj = open(filename_or_obj, 'wb')
+        _streaming_request(filename_or_obj,
+                           'project/{}/get/',
+                           self.projectid)
 
 class User(object):
     """Represents a Scratch user."""
