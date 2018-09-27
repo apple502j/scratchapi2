@@ -18,7 +18,7 @@ except ImportError:
 import re
 import requests
 from .gclass import GenericData
-from .user import Project
+from .user import Project, _streaming_request
 from .api import APISingleton
 
 class Misc(APISingleton):
@@ -101,3 +101,14 @@ class Misc(APISingleton):
                           raw_xml)
         val = match.group(1)
         return val
+
+    @staticmethod
+    def save_asset(asset_name, filename_or_obj):
+        """Save asset to a file. asset_name must be with an extension."""
+        if isinstance(filename_or_obj, str):
+            filename_or_obj = open(filename_or_obj, 'wb')
+        _streaming_request(filename_or_obj,
+                           'asset/{}/get/',
+                           asset_name,
+                           api_url="https://cdn.assets.scratch.mit.edu/internalapi/"
+                           )
