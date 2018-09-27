@@ -107,8 +107,9 @@ class Misc(APISingleton):
         """Save asset to a file. asset_name must be with an extension."""
         if isinstance(filename_or_obj, str):
             filename_or_obj = open(filename_or_obj, 'wb')
-        _streaming_request(filename_or_obj,
-                           'asset/{}/get/',
-                           asset_name,
-                           api_url="https://cdn.assets.scratch.mit.edu/internalapi/"
-                           )
+        with filename_or_obj:
+            _streaming_request(filename_or_obj,
+                               'asset/{}/get/',
+                                asset_name,
+                                api_url="https://cdn.assets.scratch.mit.edu/internalapi/"
+                              )
