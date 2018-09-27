@@ -110,6 +110,6 @@ class Misc(APISingleton):
         with filename_or_obj:
             _streaming_request(filename_or_obj,
                                'asset/{}/get/',
-                                asset_name,
-                                api_url="https://cdn.assets.scratch.mit.edu/internalapi/"
+                               asset_name,
+                               api_url="https://cdn.assets.scratch.mit.edu/internalapi/"
                               )
