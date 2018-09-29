@@ -5,14 +5,14 @@ with open("README", "r") as f:
 
 setup(
     name="scratchapi2",
-    version="0.9",
+    version="1.0",
     description="The New Scratch API Client.",
     long_description=longdesc,
     url="https://github.com/apple502j/scratchapi2",
     author="Apple502j",
     license="GPLv3+",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Natural Language :: English",
         "Natural Language :: Japanese",
