@@ -18,7 +18,7 @@ except ImportError:
 import re
 import requests
 from .gclass import GenericData
-from .user import Project, _streaming_request
+from .user import Project, Studio, _streaming_request
 from .api import APISingleton
 
 class Misc(APISingleton):
@@ -69,10 +69,6 @@ class Misc(APISingleton):
         results = self._request('search/studios?limit={}&q={}',
                                 limit,
                                 key)
-        class Studio(GenericData):
-            """Represents a studio."""
-            _repr_str = '<Studio {studio_id}>'
-            studio_id = None
         for result in results:
             yield Studio(
                 owner=result["owner"],

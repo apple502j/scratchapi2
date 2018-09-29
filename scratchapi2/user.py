@@ -32,6 +32,11 @@ def _streaming_request(fileobj, path, *opts,
     for block in req.iter_content(1024):
         fileobj.write(block)
 
+class Studio(GenericData):
+    """Represents a studio."""
+    _repr_str = '<Studio {studio_id}>'
+    studio_id = None
+
 class Project(object):
     """Represents a Scratch Project."""
 
@@ -132,10 +137,6 @@ class Project(object):
         """Yield all studios this Project belongs to."""
         req = _request('projects/{0}/studios?limit={1}&offset={2}',
                        self.projectid, limit, offset)
-        class Studio(GenericData):
-            """Represents a Scratch studio."""
-            _repr_str = '<Studio {studio_id}>'
-            studio_id = None
         for studio in req:
             yield Studio(
                 owner=studio["owner"],
@@ -229,6 +230,22 @@ class User(object):
                        self.username, limit, offset)
         for project in req:
             yield Project(project["id"], getinfo=False)
+
+    def curating(self, limit=10, offset=0):
+        """ Yield what studios the user is curating. """
+        req = _request("users/{0}/studios/curate?limit={1}&offset={2}",
+                       self.username, limit, offset)
+        for studio in req:
+            yield Studio(
+                owner=studio["owner"],
+                studio_id=studio["id"],
+                title=studio["title"],
+                description=studio["description"],
+                image=studio["image"],
+                created_at=studio["history"]["created"],
+                last_modified=studio["history"]["modified"],
+                followers=studio["stats"]["followers"]
+                )
 
 class Classroom(object):
     """Represents a Scratch Classroom."""
