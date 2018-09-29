@@ -10,6 +10,7 @@ Contains classes:
 * Classroom
 """
 
+import warnings
 import requests
 from .excs import ScratchAPIError
 from .gclass import GenericData
@@ -104,10 +105,21 @@ class Project(object):
     frameborder="0"
     allowfullscreen
 ></iframe>""".format(self.embed_url)
-        self.preview_url = "https://preview.scratch.mit.edu/#{}".format(
+        self.beta_url = "https://beta.scratch.mit.edu/#{}".format(
             self.projectid
         )
         return self.__dict__.copy()
+
+    @property
+    def preview_url(self):
+        """
+        This is kept for a historical reason. You had better use
+        Project.beta_url instead.
+        """
+        warnings.warn("Use of Project.preview_url will "
+                      "be deprecated. Please use Project."
+                      "beta_url.", PendingDeprecationWarning)
+        return self.beta_url
 
     def remixes(self, limit=3, offset=0):
         """Yield all remixes of this Project."""
