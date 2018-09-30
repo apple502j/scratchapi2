@@ -11,8 +11,7 @@ class FrontPage (ALWAYS use like FrontPage())
 - sds()
 - curator()
 """
-from warnings import warn
-from .user import Project, User
+from .user import Project, User, Studio
 from .gclass import GenericData
 from .api import APISingleton
 
@@ -44,14 +43,10 @@ class FrontPage(APISingleton):
         for item in result:
             yield Project(item["id"], getinfo=GETINFO)
 
-    def new_projects(self):
-        """Get new Projects."""
-        warn("The recent projects row was removed. "
-             "This API endpoint may disappear in the future.",
-             PendingDeprecationWarning)
-        result = self._request('proxy/featured')["community_newest_projects"]
-        for item in result:
-            yield Project(item["id"], getinfo=GETINFO)
+    def new_projects(self): # pylint: disable=no-self-use
+        """Removed. Get new Projects."""
+        # pylint: enable=no-self-use
+        raise Exception("This function has been removed and is no longer available.")
 
     def most_remixed_projects(self):
         """Get most remixed Projects."""
@@ -77,10 +72,6 @@ class FrontPage(APISingleton):
     def sds_projects(self):
         """Get SDS Projects."""
         result = self._request('proxy/featured')["scratch_design_studio"]
-        class Studio(GenericData):
-            """Represents a studio."""
-            _repr_str = '<Studio {studio_id}>'
-            studio_id = None
         for item in result:
             yield GenericData(
                 project=Project(item["id"], getinfo=GETINFO),
@@ -93,10 +84,6 @@ class FrontPage(APISingleton):
     def featured_studios(self):
         """Get featured Studios."""
         result = self._request('proxy/featured')["community_featured_studios"]
-        class Studio(GenericData):
-            """Represents a studio."""
-            _repr_str = '<Studio {studio_id}>'
-            studio_id = None
         for item in result:
             yield Studio(
                 studio_id=item["id"],
