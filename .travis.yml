@@ -3,5 +3,7 @@ python:
     - "3.6"
 install:
     - pip install requests pylint
+    - python3 setup.py install
 script:
     - pylint scratchapi2
+    - python3 -Wd -m doctest -v test/doctest_text.txt
