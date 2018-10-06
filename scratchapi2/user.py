@@ -155,8 +155,8 @@ class Project(object):
             filename_or_obj = open(filename_or_obj, 'wb')
         with filename_or_obj:
             _streaming_request(filename_or_obj,
-                                'project/{}/get/',
-                                self.projectid)
+                               'project/{}/get/',
+                               self.projectid)
 
 class User(object):
     """Represents a Scratch user."""
