@@ -30,7 +30,7 @@ class Misc(APISingleton):
 
     def health(self):
         """Get health information."""
-        health_info = self._request("")
+        health_info = self._request("health")
         return GenericData(
             version=health_info['version'],
             uptime=health_info['uptime'],
