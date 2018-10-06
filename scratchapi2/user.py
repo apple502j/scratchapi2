@@ -153,9 +153,10 @@ class Project(object):
         """Save a project's JSON to a file."""
         if isinstance(filename_or_obj, str):
             filename_or_obj = open(filename_or_obj, 'wb')
-        _streaming_request(filename_or_obj,
-                           'project/{}/get/',
-                           self.projectid)
+        with filename_or_obj:
+            _streaming_request(filename_or_obj,
+                                'project/{}/get/',
+                                self.projectid)
 
 class User(object):
     """Represents a Scratch user."""
