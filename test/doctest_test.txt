@@ -1,0 +1,41 @@
+>>> from time import sleep
+>>> import scratchapi2
+>>> test_project = scratchapi2.Project("104")
+>>> test_project.projectid
+104
+>>> test_project.url
+'https://scratch.mit.edu/projects/104'
+>>> test_project.beta_url
+'https://beta.scratch.mit.edu/#104'
+>>> test_project.title
+'Weekend'
+>>> sleep(5)
+
+>>> test_user = test_project.author
+>>> test_user
+<User andresmh>
+>>> test_user.username
+'andresmh'
+>>> test_user.userid
+139
+>>> test_user.joined
+'2007-03-05T10:41:06.000Z'
+>>> test_user.country
+'United States'
+>>> sleep(5)
+
+>>> scratchapi2.Translate().translate("ja", "Hello")
+'こんにちは'
+>>> len(scratchapi2.Translate().languages()["result"])>=60
+True
+>>> sleep(5)
+
+>>> scratchapi2.Misc().username_available("ScratchCat")
+'username exists'
+>>> scratchapi2.Misc().username_available("LongUserNameDeniedAsWeSeeHere")
+'invalid username'
+>>> scratchapi2.Misc().info().api
+'api.scratch.mit.edu'
+>>> scratchapi2.Misc().health().sql.ssl
+True
+>>> sleep(5)
