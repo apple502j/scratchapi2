@@ -17,6 +17,7 @@ This is made from these classes:
 * GenericData - help yourself.
 """
 
+from .auth import Auth
 from .user import User, Project
 from .translate import Translate
 from .front import FrontPage
@@ -27,6 +28,7 @@ from .gclass import GenericData
 __version__ = '0.9'
 
 __all__ = [
+    'Auth',
     'Translate',
     'Project',
     'User',
