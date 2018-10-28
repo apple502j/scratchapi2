@@ -6,7 +6,7 @@ instead of scratchapi2.User(username)
 
 import requests
 from .api import APIClass as __APIClass
-from .user import (User as __User, Project as __Project)
+from .user import User as __User, Project as __Project
 
 #loginname = None
 
@@ -19,18 +19,16 @@ class APIClass(__APIClass):
 
     def _request(self, path, *opts, api_url=None, method="get", params={}, headers={}, no_json=False):
         """Internal method to request data from the API."""
-        methods = {
-            "get": self._session.get,
-            "post": self._session.post
-        }
-        if not methods.get(method, None):
-            raise ValueError("Unknown method: {}".format(method))
-        req = methods[method](
-            (api_url or self.api_url)
-            + path.format(*opts),
+        def p(a):
+            print(a)
+            return a
+        req = getattr(self._session, method, self._session.get)(
+            p((api_url or self.api_url)
+            + path.format(*opts)),
             data=params,
             headers=headers
         )
+        print(req, req.headers)
         return req.text if no_json else req.json()
 
 class APISingleton(APIClass):
@@ -49,32 +47,31 @@ class Auth(APIClass):
     def __init__(self, username, password):
         super().__init__()
         self.loginuser = username
-        self._headers = {}
         self.login(username, password)
 
     def login(self, username, password):
-        req=self._request("session",
-                        api_url="https://scratch.mit.edu/",
-                        params={"X-Requested-With":"XMLHttpRequest"},
-                        no_json=True)
-        self._headers["Cookie"]="scratchcsrftoken={};".format(
-            self._session.cookies["scratchcsrftoken"])
-        self._headers["X-CSRFToken"]=self._session.cookies["scratchcsrftoken"];
-        print(self._headers)
+        req = self._request("csrf_token",
+                            api_url="https://scratch.mit.edu/",
+                            no_json=True)
+        self._session.headers["X-CSRFToken"] = self._session.cookies["scratchcsrftoken"]
+        self._session.headers["X-Requested-With"] = 'XMLHttpRequest'
+        self._session.headers["Origin"] = 'https://scratch.mit.edu'
+        self._session.cookies["permissions"] = '{}'
+        print(self._session.headers)
         print(self._session.cookies)
-        req2=self._request("login",
-                        api_url="https://scratch.mit.edu/",
-                        method="post",
-                        params={
-                            "username": username,
-                            "password": password,
-                            "csrftoken": self._session.cookies["scratchcsrftoken"],
-                            "csrfmiddlewaretoken": self._session.cookies["scratchcsrftoken"]
-                        },
-                        headers=self._headers,
-                        no_json=True)
-        print(self._headers)
+        req2 = self._request("login",
+                             api_url="https://scratch.mit.edu/",
+                             method="post",
+                             params={
+                                 "username": username,
+                                 "password": password,
+                                 "useMessages": True
+                             },
+                             no_json=True)
+        print(req2)
+        print(self._session.headers)
         print(self._session.cookies)
-        #self._headers["Cookie"]+="scratchsessionsid={};".format(
-        #    self._session.cookies["scratchsessionsid"])
-        self._headers["X-CSRFToken"]=self._session.cookies["scratchcsrftoken"];
+        req3 = self._request("session/",
+                             api_url="https://scratch.mit.edu/",
+                             method="get")
+        self._session.headers["X-Token"] = req3['user']['token']
