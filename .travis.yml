@@ -6,4 +6,5 @@ install:
     - python3 setup.py install
 script:
     - pylint scratchapi2
+    - python3 ./test/api_check.py
     - python3 -Wd -m doctest -v ./test/doctest_test.txt
