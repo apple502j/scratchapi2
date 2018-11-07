@@ -24,7 +24,7 @@ def _request(path, *opts, api_url="https://api.scratch.mit.edu/"):
     return result
 
 def _streaming_request(fileobj, path, *opts,
-                       api_url="https://projects.scratch.mit.edu/internalapi/"):
+                       api_url="https://projects.scratch.mit.edu/"):
     """Make a large request (usually a project's JSON). This must provide
     a file object ``fileobj`` to copy the request into.
     """
@@ -155,7 +155,7 @@ class Project(object):
             filename_or_obj = open(filename_or_obj, 'wb')
         with filename_or_obj:
             _streaming_request(filename_or_obj,
-                               'project/{}/get/',
+                               '{}',
                                self.projectid)
 
 class User(object):
