@@ -1,4 +1,4 @@
-                               scratchapi2                           
+                               scratchapi2
                A new Scratch API Client for Python 3+
                    Under GPLv3 or any later version
 
@@ -36,6 +36,7 @@ It consists of some classes, such as:
 * Project (Scratch project)
 * FrontPage (Scratch Front Page API)
 * Classroom (Scratch classroom)
+* Comment
 and some classes just for developers...
 
 ==== Requirements

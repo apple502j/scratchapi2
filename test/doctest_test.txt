@@ -9,7 +9,10 @@
 'https://beta.scratch.mit.edu/#104'
 >>> test_project.title
 'Weekend'
->>> sleep(5)
+>>> cmt = list(test_project.comments(limit=1))[0]
+>>> cmt.visibility
+'visible'
+>>> sleep(1)
 
 >>> test_user = test_project.author
 >>> test_user
@@ -22,13 +25,15 @@
 '2007-03-05T10:41:06.000Z'
 >>> test_user.country
 'United States'
->>> sleep(5)
+>>> scratchapi2.User("ScratchCat").scratchteam
+True
+>>> sleep(1)
 
 >>> scratchapi2.Translate().translate("ja", "Hello")
 'こんにちは'
 >>> len(scratchapi2.Translate().languages()["result"])>=60
 True
->>> sleep(5)
+>>> sleep(1)
 
 >>> scratchapi2.Misc().username_available("ScratchCat")
 'username exists'
@@ -38,4 +43,3 @@ True
 'api.scratch.mit.edu'
 >>> scratchapi2.Misc().health().sql.ssl
 True
->>> sleep(5)
