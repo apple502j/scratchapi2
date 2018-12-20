@@ -8,6 +8,7 @@ Contains classes:
 * Project
 * User
 * Classroom
+* Comment
 """
 
 import warnings
@@ -24,7 +25,7 @@ def _request(path, *opts, api_url="https://api.scratch.mit.edu/"):
     return result
 
 def _streaming_request(fileobj, path, *opts,
-                       api_url="https://projects.scratch.mit.edu/internalapi/"):
+                       api_url="https://projects.scratch.mit.edu/"):
     """Make a large request (usually a project's JSON). This must provide
     a file object ``fileobj`` to copy the request into.
     """
@@ -64,6 +65,9 @@ class Project(object):
         self.title = req["title"]
         self.description = req["description"]
         self.instructions = req["instructions"]
+        self.visibility = req["visibility"]
+        self.public = req["public"]
+        self.comment_open = req["comments_allowed"]
         #this does getinfo because info is only called with getinfo=True anyway
         self.author = User(req["author"]["username"], getinfo=True)
         self.image = req["image"]
@@ -73,7 +77,7 @@ class Project(object):
         self.views = req["stats"]["views"]
         self.loves = req["stats"]["loves"]
         self.favorites = req["stats"]["favorites"]
-        self.comments = req["stats"]["comments"]
+        self.comment_counts = req["stats"]["comments"]
         #renamed to avoid conflict with "remix" method
         self.remix_count = req["stats"]["remixes"]
         self.parent = (
@@ -155,8 +159,41 @@ class Project(object):
             filename_or_obj = open(filename_or_obj, 'wb')
         with filename_or_obj:
             _streaming_request(filename_or_obj,
-                               'project/{}/get/',
+                               '{}',
                                self.projectid)
+
+    def comments(self, limit=10, offset=0):
+        """ Get comments. Note that replies are not included here. """
+        req = _request('projects/{0}/comments?limit={1}&offset={2}',
+                       self.projectid, limit, offset)
+        for comment in req:
+            yield Comment(
+                comment_id=comment["id"],
+                sender=comment["author"]["username"],
+                path="projects/{0}/comments/".format(self.projectid),
+                content=comment["content"],
+                parent=None,
+                created=comment["datetime_created"],
+                last_modified=comment["datetime_modified"],
+                visibility=comment["visibility"],
+                reply_count=comment["reply_count"]
+            )
+
+    def comment(self, comment_id):
+        """ Get a specific comment of a project, by using ID.
+        limit and offset are not available - because it always returns one. """
+        comment = _request('projects/{0}/comments/{1}'.format(self.projectid, comment_id))[0]
+        return Comment(
+            comment_id=comment_id,
+            sender=comment["author"]["username"],
+            path="projects/{0}/comments/".format(self.projectid),
+            content=comment["content"],
+            parent=self.comment(comment["parent_id"]) if comment["parent_id"] else None,
+            created=comment["datetime_created"],
+            last_modified=comment["datetime_modified"],
+            visibility=comment["visibility"],
+            reply_count=comment["reply_count"]
+        )
 
 class User(object):
     """Represents a Scratch user."""
@@ -190,6 +227,7 @@ class User(object):
         self.status = req["profile"]["status"]
         self.bio = req["profile"]["bio"]
         self.country = req["profile"]["country"]
+        self.scratchteam = req["scratchteam"]
 
         # Just for convenience
         self.joined_at = self.joined
@@ -290,3 +328,57 @@ class Classroom(object):
         self.what_working_on = self.description
         self.teacher = self.educator
         return self.__dict__.copy()
+
+class Comment(object):
+    """ A comment. """
+    def __init__(self, comment_id, sender, path=None, content=None, parent=None,
+                 created=None, last_modified=None, reply_count=0, visibility="visible"):
+        """ Initialize a comment. """
+        self.comment_id = comment_id
+        self.sender = User(sender, getinfo=True)
+        self.author = self.sender
+        self._path = path
+        self.content = content
+        self.parent = parent
+        self.reply_count = reply_count
+        self.created = created
+        self.last_modified = last_modified
+        self.visibility = visibility
+
+    def __str__(self):
+        """ Represent a comment """
+        return "<Comment {0}>".format(self.comment_id)
+
+    __repr__ = __str__
+
+    @property
+    def is_modified(self):
+        """ Check if a comment has been modified. """
+        return self.created != self.last_modified
+
+    @property
+    def has_reply(self):
+        """ Check if a comment has replies. """
+        return self.reply_count > 0
+
+    def replies(self, limit=3, offset=0): # pylint: disable=inconsistent-return-statements
+        """ Get replies. """
+        if not self.has_reply:
+            return []
+        replies = _request("{0}{1}/replies?limit={2}&offset={3}",
+                           self._path,
+                           self.comment_id,
+                           limit,
+                           offset)
+        for reply in replies:
+            yield Comment(
+                comment_id=reply["id"],
+                sender=reply["author"]["username"],
+                path=self._path,
+                content=reply["content"],
+                parent=self,
+                created=reply["datetime_created"],
+                last_modified=reply["datetime_modified"],
+                reply_count=0,
+                visibility=reply["visibility"]
+            )
