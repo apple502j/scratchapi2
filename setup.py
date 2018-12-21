@@ -5,7 +5,7 @@ with open("README", "r") as f:
 
 setup(
     name="scratchapi2",
-    version="1.3",
+    version="1.4",
     description="The New Scratch API Client.",
     long_description=longdesc,
     url="https://github.com/apple502j/scratchapi2",
