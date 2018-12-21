@@ -121,7 +121,7 @@ class Misc(APISingleton):
                     smaller_res = results["comment_data"][comment_keys.index(kwargs["place"])]["values"]
                     return_values = []
                     for smallest_res in smaller_res:
-                        timstamp=datetime.utcfromtimestamp(smallest_res["x"]/1000)
+                        timestamp = datetime.utcfromtimestamp(smallest_res["x"]/1000)
                         return_values.append(GenericData(timestamp=timestamp,
                                                          value=smallest_res["y"],
                                                          _repr_str="Comments as of  {0}".format(timestamp.isoformat())
@@ -138,7 +138,7 @@ class Misc(APISingleton):
                     smaller_res = results["activity_data"][activity_keys.index(kwargs["kind"])]["values"]
                     return_values = []
                     for smallest_res in smaller_res:
-                        timstamp=datetime.utcfromtimestamp(smallest_res["x"]/1000)
+                        timestamp = datetime.utcfromtimestamp(smallest_res["x"]/1000)
                         return_values.append(GenericData(timestamp=timestamp,
                                                          value=smallest_res["y"],
                                                          _repr_str="Activity as of  {0}".format(timestamp.isoformat())
@@ -154,7 +154,7 @@ class Misc(APISingleton):
                     smaller_res = results["active_user_data"][activity_keys.index(kwargs["kind"])]["values"]
                     return_values = []
                     for smallest_res in smaller_res:
-                        timstamp=datetime.utcfromtimestamp(smallest_res["x"]/1000)
+                        timestamp = datetime.utcfromtimestamp(smallest_res["x"]/1000)
                         return_values.append(GenericData(timestamp=timestamp,
                                                          value=smallest_res["y"],
                                                          _repr_str="Active Users as of  {0}".format(timestamp.isoformat())
@@ -170,7 +170,7 @@ class Misc(APISingleton):
                     smaller_res = results["project_data"][project_keys.index(kwargs["kind"])]["values"]
                     return_values = []
                     for smallest_res in smaller_res:
-                        timstamp=datetime.utcfromtimestamp(smallest_res["x"]/1000)
+                        timestamp = datetime.utcfromtimestamp(smallest_res["x"]/1000)
                         return_values.append(GenericData(timestamp=timestamp,
                                                          value=smallest_res["y"],
                                                          _repr_str="Projects as of  {0}".format(timestamp.isoformat())
