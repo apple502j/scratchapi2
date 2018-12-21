@@ -15,16 +15,17 @@ This is made from these classes:
 * Translate - Translator
 * ScratchAPIError - Error
 * GenericData - help yourself.
+* StatisticsType - Use along with Misc.statistics()
 """
 
 from .user import User, Project
 from .translate import Translate
 from .front import FrontPage
-from .misc import Misc
+from .misc import Misc, StatisticsType
 from .excs import ScratchAPIError
 from .gclass import GenericData
 
-__version__ = '0.9'
+__version__ = '1.4'
 
 __all__ = [
     'Translate',
@@ -34,4 +35,5 @@ __all__ = [
     'Misc',
     'ScratchAPIError',
     'GenericData',
+    'StatisticsType'
 ]
