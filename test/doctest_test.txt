@@ -5,8 +5,6 @@
 104
 >>> test_project.url
 'https://scratch.mit.edu/projects/104'
->>> test_project.beta_url
-'https://beta.scratch.mit.edu/#104'
 >>> test_project.title
 'Weekend'
 >>> cmt = list(test_project.comments(limit=1))[0]
