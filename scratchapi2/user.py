@@ -14,7 +14,6 @@ Contains classes:
 import warnings
 import requests
 from .excs import ScratchAPIError
-from .gclass import GenericData
 
 #pylint: disable=too-many-instance-attributes,too-many-function-args
 

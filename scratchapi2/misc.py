@@ -213,7 +213,7 @@ class Misc(APISingleton):
                                 limit,
                                 key)
         for result in results:
-            yield Studio(studio_id=result["id"], getinfo=False)
+            yield Studio(result["id"], getinfo=False)
 
     def username_available(self, name):
         """Check if a username is available."""
@@ -225,7 +225,7 @@ class Misc(APISingleton):
     def valid_email(self, email):
         """Check if an email address is valid."""
         result = self._request('accounts/check_email/{}',
-                               name,
+                               email,
                                api_url='https://scratch.mit.edu/')
         return result[0]["msg"]
 

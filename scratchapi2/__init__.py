@@ -35,7 +35,7 @@ __all__ = [
     'Project',
     'User',
     'Classroom',
-    'Studio'
+    'Studio',
     'FrontPage',
     'Misc',
     'ScratchAPIError',
