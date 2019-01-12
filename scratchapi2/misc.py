@@ -71,7 +71,7 @@ class Misc(APISingleton):
             cache=GenericData(
                 connected=health_info['cache']['connected'],
                 ready=health_info['cache']['ready'],
-            ),
+            )
         )
 
     def project_count(self):
@@ -213,21 +213,19 @@ class Misc(APISingleton):
                                 limit,
                                 key)
         for result in results:
-            yield Studio(
-                owner=result["owner"],
-                studio_id=result["id"],
-                title=result["title"],
-                description=result["description"],
-                image=result["image"],
-                created_at=result["history"]["created"],
-                last_modified=result["history"]["modified"],
-                followers=result["stats"]["followers"]
-            )
+            yield Studio(result["id"], getinfo=False)
 
     def username_available(self, name):
         """Check if a username is available."""
         result = self._request('accounts/check_username/{}',
                                name,
+                               api_url='https://scratch.mit.edu/')
+        return result[0]["msg"]
+
+    def valid_email(self, email):
+        """Check if an email address is valid."""
+        result = self._request('accounts/check_email/{}',
+                               email,
                                api_url='https://scratch.mit.edu/')
         return result[0]["msg"]
 

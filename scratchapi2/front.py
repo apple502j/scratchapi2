@@ -66,7 +66,8 @@ class FrontPage(APISingleton):
         for item in result:
             yield GenericData(
                 project=Project(item["id"], getinfo=GETINFO),
-                curator=User(item["curator_name"], getinfo=GETINFO)
+                curator=User(item["curator_name"], getinfo=GETINFO),
+                _repr_str='<Curated Project>'
             )
 
     def sds_projects(self):
@@ -75,18 +76,12 @@ class FrontPage(APISingleton):
         for item in result:
             yield GenericData(
                 project=Project(item["id"], getinfo=GETINFO),
-                studio=Studio(
-                    studio_id=item["gallery_id"],
-                    title=item["gallery_title"]
-                )
+                studio=Studio(item["gallery_id"], getinfo=GETINFO),
+                _repr_str='<SDS Project>'
             )
 
     def featured_studios(self):
         """Get featured Studios."""
         result = self._request('proxy/featured')["community_featured_studios"]
         for item in result:
-            yield Studio(
-                studio_id=item["id"],
-                title=item["title"],
-                image=item["thumbnail_url"]
-            )
+            yield Studio(item["id"], getinfo=GETINFO)

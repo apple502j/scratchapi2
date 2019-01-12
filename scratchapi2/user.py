@@ -14,7 +14,6 @@ Contains classes:
 import warnings
 import requests
 from .excs import ScratchAPIError
-from .gclass import GenericData
 
 #pylint: disable=too-many-instance-attributes,too-many-function-args
 
@@ -32,11 +31,6 @@ def _streaming_request(fileobj, path, *opts,
     req = requests.get(api_url + path.format(*opts), stream=True)
     for block in req.iter_content(1024):
         fileobj.write(block)
-
-class Studio(GenericData):
-    """Represents a studio."""
-    _repr_str = '<Studio {studio_id}>'
-    studio_id = None
 
 class Project(object):
     """Represents a Scratch Project."""
@@ -68,7 +62,6 @@ class Project(object):
         self.visibility = req["visibility"]
         self.public = req["public"]
         self.comment_open = req["comments_allowed"]
-        #this does getinfo because info is only called with getinfo=True anyway
         self.author = User(req["author"]["username"], getinfo=True)
         self.image = req["image"]
         self.created = req["history"]["created"]
@@ -99,11 +92,10 @@ class Project(object):
             self.projectid
         )
         self.remixes_url = self.url + "/remixes"
-        self.remixtree_url = self.url + "/remixtree"
         self.studios_url = self.url + "/studios"
-        self.see_inside_url = self.url + "#editor"
-        self.fullscreen_url = self.url + "#fullscreen"
-        self.embed_url = "https://scratch.mit.edu/projects/embed/{}".format(
+        self.see_inside_url = self.url + "/editor"
+        self.fullscreen_url = self.url + "/fullscreen"
+        self.embed_url = "https://scratch.mit.edu/projects/{}/embed/".format(
             self.projectid
         )
         self.embed_html = """<iframe
@@ -114,21 +106,7 @@ class Project(object):
     frameborder="0"
     allowfullscreen
 ></iframe>""".format(self.embed_url)
-        self.beta_url = "https://beta.scratch.mit.edu/#{}".format(
-            self.projectid
-        )
         return self.__dict__.copy()
-
-    @property
-    def preview_url(self):
-        """
-        This is kept for a historical reason. You had better use
-        Project.beta_url instead.
-        """
-        warnings.warn("Use of Project.preview_url will "
-                      "be deprecated. Please use Project."
-                      "beta_url.", PendingDeprecationWarning)
-        return self.beta_url
 
     def remixes(self, limit=3, offset=0):
         """Yield all remixes of this Project."""
@@ -142,16 +120,7 @@ class Project(object):
         req = _request('projects/{0}/studios?limit={1}&offset={2}',
                        self.projectid, limit, offset)
         for studio in req:
-            yield Studio(
-                owner=studio["owner"],
-                studio_id=studio["id"],
-                title=studio["title"],
-                description=studio["description"],
-                image=studio["image"],
-                created_at=studio["history"]["created"],
-                last_modified=studio["history"]["modified"],
-                followers=studio["stats"]["followers"]
-            )
+            yield Studio(studio["id"], getinfo=False)
 
     def save_json(self, filename_or_obj):
         """Save a project's JSON to a file."""
@@ -275,16 +244,7 @@ class User(object):
         req = _request("users/{0}/studios/curate?limit={1}&offset={2}",
                        self.username, limit, offset)
         for studio in req:
-            yield Studio(
-                owner=studio["owner"],
-                studio_id=studio["id"],
-                title=studio["title"],
-                description=studio["description"],
-                image=studio["image"],
-                created_at=studio["history"]["created"],
-                last_modified=studio["history"]["modified"],
-                followers=studio["stats"]["followers"]
-                )
+            yield Studio(studio["id"], getinfo=False)
 
 class Classroom(object):
     """Represents a Scratch Classroom."""
@@ -382,3 +342,52 @@ class Comment(object):
                 reply_count=0,
                 visibility=reply["visibility"]
             )
+
+class Studio(object):
+    """Represents a studio. """
+    studioid = None
+    def __init__(self, studioid, getinfo=True):
+        """Initialize studio class."""
+        self.studioid = int(studioid)
+        if getinfo:
+            self.info()
+
+    def __str__(self):
+        """Represent a studio."""
+        return "<Studio {0}>".format(self.studioid)
+
+    __repr__ = __str__
+
+    def info(self):
+        """Get an information about a studio. It sets its dict
+        and returns it.
+        """
+        req = _request("https://api.scratch.mit.edu/studios/{0}",
+                       self.studioid)
+        self.title = req["title"]
+        self.image = req["image"]
+        self.description = req["description"]
+        self.owner_id = req["owner"]
+        self.visibility = req["visibility"]
+        self.created = req["history"]["created"]
+        self.modified = req["history"]["modified"]
+        self.followers = req["stats"]["followers"]
+        # Just for convenience
+        self.author_id = self.owner_id
+        return self.__dict__.copy()
+
+    @property
+    def owner(self):
+        """Warns the user that this returns User ID."""
+        warnings.warn("Warning: this property returns the owner's ID due "
+                      "to a bug with API. Don't pass this value to User(), "
+                      "because it cannot handle IDs-to-usernames. To dismiss "
+                      "this warning, use Studio.owner_id.", UserWarning)
+        return self.owner_id
+
+    def projects(self, limit=5, offset=0):
+        """Gets list of projects in a studio."""
+        req = _request("https://api.scratch.mit.edu/studios/{0}/projects?limit={1}&offset={2}",
+                       self.studioid, limit, offset)
+        for project in req:
+            yield Project(project["id"], getinfo=False)

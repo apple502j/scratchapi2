@@ -1,5 +1,6 @@
 """Contains the APIClass and APISingleton base classes."""
 import requests
+from .excs import Maintenance
 
 class APIClass(object):
     """Base class for classes that access the API."""
@@ -16,10 +17,14 @@ class APIClass(object):
 
     def _request(self, path, *opts, api_url=None):
         """Internal method to request data from the API."""
-        return requests.get(
+        req = requests.get(
             (api_url or self.api_url)
             + path.format(*opts)
-        ).json()
+        )
+        if req.status_code >= 500:
+            raise Maintenance
+        else:
+            return req.json()
 
 class APISingleton(APIClass):
     """Base class for singleton classes that access the API."""
