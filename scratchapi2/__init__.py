@@ -30,6 +30,7 @@ from .gclass import GenericData
 
 __version__ = '1.5'
 
+
 __all__ = [
     'Translate',
     'Project',
