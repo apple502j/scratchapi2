@@ -37,6 +37,7 @@ It consists of some classes, such as:
 * FrontPage (Scratch Front Page API)
 * Classroom (Scratch classroom)
 * Comment
+* Studio
 and some classes just for developers...
 
 ==== Requirements

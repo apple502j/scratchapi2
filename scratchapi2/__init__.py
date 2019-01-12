@@ -16,24 +16,30 @@ This is made from these classes:
 * ScratchAPIError - Error
 * GenericData - help yourself.
 * StatisticsType - Use along with Misc.statistics()
+* Studio - Information about a studio
+* Classroom - Information about a classroom
+* Maintenance - an exception which is raised when Scratch is in Maintenance Mode.
 """
 
-from .user import User, Project
+from .user import User, Project, Classroom, Studio
 from .translate import Translate
 from .front import FrontPage
 from .misc import Misc, StatisticsType
-from .excs import ScratchAPIError
+from .excs import ScratchAPIError, Maintenance
 from .gclass import GenericData
 
-__version__ = '1.4'
+__version__ = '1.5'
 
 __all__ = [
     'Translate',
     'Project',
     'User',
+    'Classroom',
+    'Studio'
     'FrontPage',
     'Misc',
     'ScratchAPIError',
     'GenericData',
-    'StatisticsType'
+    'StatisticsType',
+    'Maintenance'
 ]
