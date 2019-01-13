@@ -27,6 +27,7 @@ from .front import FrontPage
 from .misc import Misc, StatisticsType
 from .excs import ScratchAPIError, Maintenance
 from .gclass import GenericData
+from .auth import Auth
 
 __version__ = '1.5'
 
@@ -42,5 +43,6 @@ __all__ = [
     'ScratchAPIError',
     'GenericData',
     'StatisticsType',
-    'Maintenance'
+    'Maintenance',
+    'Auth'
 ]
